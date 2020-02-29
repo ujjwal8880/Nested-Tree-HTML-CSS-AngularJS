@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tree</title>
+    <link href="tree.css" type="text/css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular-sanitize.js"></script>
+</head>
+<body ng-app="myApp">
+    <div class="content" ng-controller="myController">
+
+        <!--        Below HTML is generated from tree.js file in variable htmlContent    -->
+        <div ng-bind-html="htmlContent">
+        </div>
+
+
+    </div>
+</body>
+<script>
+    var myApp = angular.module('myApp', []);
+
+    myApp.controller('myController', ['$scope','$sce', function($scope,$sce) {
+
+        const data = [
+            {
+                "id": 303921,
+                "active": false,
+                "updatedAt": "29-Feb-2020",
+                "children": [
+                    {
+                        "id": 303922,
+                        "active": false,
+                        "updatedAt": "1-Mar-2020",
+                        "children": [
+                            {
+                                "id": 303925,
+                                "active": false,
+                                "updatedAt": "2-Mar-2020",
+                                "children": [
+                                    {
+                                        "id": 303927,
+                                        "active": false,
+                                        "updatedAt": "3-Mar-2020",
+                                        "children": [
+                                            {
+                                                "id": 303928,
+                                                "active": false,
+                                                "updatedAt": "4-Mar-2020",
+                                            },
+                                            {
+                                                "id": 303929,
+                                                "active": true,
+                                                "updatedAt": "5-Mar-2020",
+                                            }
+                                        ]
+                                    }
+                                ]
+                            },
+                            {
+                                "id": 303926,
+                                "active": false,
+                                "updatedAt": "6-Mar-2020",
+                            }
+                        ]
+                    },
+                    {
+                        "id": 303923,
+                        "active": false,
+                        "updatedAt": "8-Mar-2020",
+                        "children": [
+                            {
+                                "id": 303930,
+                                "active": false,
+                                "updatedAt": "7-Mar-2020",
+                            },
+                            {
+                                "id": 303931,
+                                "active": false,
+                                "updatedAt": "8-Mar-2020",
+                            },
+                            {
+                                "id": 303932,
+                                "active": false,
+                                "updatedAt": "9-Mar-2020",
+                            }
+                        ]
+                    },
+                    {
+                        "id": 303924,
+                        "active": false,
+                        "updatedAt": "10-Mar-2020",
+                        "children": [
+                            {
+                                "id": 303933,
+                                "active": false,
+                                "updatedAt": "11-Mar-2020",
+                                "children": [
+                                    {
+                                        "id": 303934,
+                                        "active": false,
+                                        "updatedAt": "12-Mar-2020",
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function generateHTMLForObject(obj, str = '') {
+            const ul_open = '<ul>';
+            const ul_close = '</ul>';
+            if (obj['active'] === true) {
+                var li_open = '<li><div class="timeStamp">' + obj['updatedAt'] + '</div><div class="treeDiv2">' + obj['id'] + '</div>';
+            } else {
+                var li_open = '<li><div class="timeStamp">' + obj['updatedAt'] + '</div><div class="treeDiv">' + obj['id'] + '</div>';
+            }
+            const li_close = '</li>';
+            str += ul_open;
+            if (obj) {
+                str += li_open;
+                if (obj['children'] && obj['children'].length > 0) {
+                    for (const child of obj['children']) {
+                        str += generateHTMLForObject(child, '');
+                    }
+                }
+                str += li_close;
+            }
+            str += ul_close;
+            return str;
+        }
+
+        var generatedStringFromObject = '<ul class="tree">' + generateHTMLForObject(data[0], '').split('').splice(4).join('');
+        generatedStringFromObject = generatedStringFromObject.replace(/<\/ul><ul>/gi, '');
+
+        // Pass generatedStringFromObject to HTML where You want to render
+        $scope.htmlContent = $sce.trustAsHtml(generatedStringFromObject);
+
+    }]);
+</script>
+</html>
